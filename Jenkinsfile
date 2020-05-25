@@ -34,5 +34,11 @@ pipeline {
                 deploy adapters: [tomcat8(credentialsId: 'TomcatLogin', path: '', url: 'http://localhost:8001/')], contextPath: 'tasks-backend', onFailure: false, war: 'target/tasks-backend.war'
             }
         }
+        stage ('API Test') {
+            steps {
+                bat 'echo ignorando testes de API'
+                // git credentialsId: 'Jenkins_login', url: 'https://github.com/thiagomartos/tasks-api-test'
+            }
+        }
     }
 }
