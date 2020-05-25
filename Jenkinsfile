@@ -36,8 +36,18 @@ pipeline {
         }
         stage ('API Test') {
             steps {
-                bat 'echo ignorando testes de API'
-                // git credentialsId: 'Jenkins_login', url: 'https://github.com/thiagomartos/tasks-api-test'
+                dir('api-test'){
+                    bat 'echo ignorando testes de API'
+                }
+            }
+        }
+        stage ('Deploy Frontend') {
+            steps {
+                dir('frontend'){
+                    git credentialsId: 'Jenkins_login', url: 'https://github.com/thiagomartos/tasks-frontend'
+                    bat 'mvn package'
+                    deploy adapters: [tomcat8(credentialsId: 'TomcatLogin', path: '', url: 'http://localhost:8001/')], contextPath: 'tasks', onFailure: false, war: 'target/tasks.war'
+                }
             }
         }
     }
